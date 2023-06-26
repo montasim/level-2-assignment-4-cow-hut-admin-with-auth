@@ -7,8 +7,8 @@ const pick = <T extends Record<string, unknown>, K extends keyof T>(
   for (const key of keys) {
     if (obj && Object.hasOwnProperty.call(obj, key)) {
       let prevPriceObj = {};
-      if (key === 'minPrice' || key === 'maxPrice') {
-        prevPriceObj = { ...(finalObject?.price || {}) };
+      if(key === 'minPrice' || key === 'maxPrice') {
+        prevPriceObj = { ...finalObject?.price || {} };
       }
       if (key === 'minPrice') {
         (finalObject as Record<string, unknown>)['price'] = {

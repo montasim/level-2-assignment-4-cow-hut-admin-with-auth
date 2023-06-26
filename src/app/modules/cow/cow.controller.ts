@@ -12,6 +12,15 @@ const createCow: RequestHandler = catchAsync(
     const cow = req.body;
     const result = await CowService.createCow(cow);
 
+    if(!result) {
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: 'Can not create cow',
+            data: result,
+        });
+    }
+
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -44,6 +53,15 @@ const getCow: RequestHandler = catchAsync(
     const cowId: string = req.params.id;
     const cow = await CowService.getCow(cowId);
 
+    if (!cow) {
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: 'Can not find cow with this id',
+            data: cow,
+        });
+    }
+
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -60,6 +78,15 @@ const updateCow: RequestHandler = catchAsync(
 
     const updatedCow = await CowService.updateCowData(cowId, updatedCowData);
 
+    if (!updatedCow) {
+        sendResponse(res, {
+            statusCode: 200,
+            success: true,
+            message: 'Can not find cow with this id',
+            data: updatedCow,
+        });
+    }
+
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -73,6 +100,7 @@ const deleteCow: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const cowId = req.params.id;
     const result = await CowService.deleteCow(cowId);
+
     if (!result) {
       sendResponse(res, {
         statusCode: 200,

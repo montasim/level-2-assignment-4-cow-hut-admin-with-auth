@@ -1,9 +1,10 @@
 import {Request, Response} from "express";
 import {OrderService} from "./order.service";
 import sendResponse from "../../../shared/sendResponse";
+import catchAsync from "../../../shared/catchAsync";
 
 
-const buyCow = async (req: Request, res: Response) => {
+const buyCow = catchAsync(async (req: Request, res: Response) => {
     let cowId = req.body?.cow;
     let buyerId = req.body?.buyer;
     buyerId = buyerId.replace("ObjectId(", "").replace(")", "");
@@ -17,9 +18,9 @@ const buyCow = async (req: Request, res: Response) => {
         message: 'Order placed successfully',
         data: result,
     });
-}
+});
 
-const getOrders = async (req: Request, res: Response) => {
+const getOrders = catchAsync(async (req: Request, res: Response) => {
     const result = await OrderService.getAllOrders();
 
     sendResponse(res, {
@@ -28,7 +29,7 @@ const getOrders = async (req: Request, res: Response) => {
         message: 'Order placed successfully',
         data: result,
     });
-}
+});
 
 export const OrderController = {
     getOrders,

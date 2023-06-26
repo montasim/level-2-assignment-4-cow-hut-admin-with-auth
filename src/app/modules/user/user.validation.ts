@@ -26,7 +26,30 @@ const createUserZodSchema = z.object({
     budget: z.number().min(0).optional(),
     income: z.number().min(0).optional(),
   }),
-});
+})
+//   .superRefine((val, ctx) => {
+//       if(val.body.budget >= 0 && val.body.income >= 0) {
+//         ctx.addIssue({
+//           code: z.ZodIssueCode.custom,
+//           message: "An user can not have both budget and income together."
+//         });
+//       }
+//
+//       if(val.body.role === 'seller' && val.body.budget >= 0) {
+//         ctx.addIssue({
+//           code: z.ZodIssueCode.custom,
+//           message: "A seller can have income, not a budget"
+//         });
+//       }
+//
+//       if(val.body.role === 'buyer' && val.body.income >= 0) {
+//         ctx.addIssue({
+//           code: z.ZodIssueCode.custom,
+//           message: "A buyer can have budget, not a income"
+//         });
+//       }
+//     }
+// )
 
 const updateUserZodSchema = z.object({
   body: z.object({
@@ -66,11 +89,29 @@ const updateUserZodSchema = z.object({
       .optional(),
     budget: z.number().min(0).optional(),
     income: z.number().min(0).optional(),
-  }),
-});
-//   .refine(data=>
-//     (data.body.budget && data.body.income), {
-//       message: "A user can not have both budget and income"
+  })})
+  // .superRefine((val, ctx): arg is { first: string; second: number } => {
+//   .superRefine((val, ctx) => {
+//     if(val.body.budget > 0 && val.body.income > 0) {
+//       ctx.addIssue({
+//         code: z.ZodIssueCode.custom,
+//         message: "An user can not have both budget and income together."
+//       });
+//     }
+//
+//     if(val.body.role === 'seller' > 0 && val.body.budget > 0) {
+//       ctx.addIssue({
+//         code: z.ZodIssueCode.custom,
+//         message: "An seller can have income not budget"
+//       });
+//     }
+//
+//     if(val.body.role === 'buyer' > 0 && val.body.income > 0) {
+//       ctx.addIssue({
+//         code: z.ZodIssueCode.custom,
+//         message: "An buyer can have budget not income"
+//       });
+//     }
 //   }
 // )
 

@@ -21,8 +21,12 @@ const buyCow = async (cowId: string, buyerId: string) => {
     }
     sellerId = sellerId.replace("ObjectId(", "").replace(")", "");
     let seller = await User.findById(sellerId).session(session);
-    if(!seller?.income) {
+    if (seller?.income === undefined || cow?.price === undefined || cow?.label === undefined || buyer?.budget === undefined) {
       throw new ApiError(500, 'Internal error');
+    }
+
+    if (seller?.income < 0 || cow?.price < 0 ||  buyer?.budget < 0) {
+      throw new ApiError(500, 'Income, price or budget cannot be negative');
     }
 
     if(buyer?.budget < cow?.price) {

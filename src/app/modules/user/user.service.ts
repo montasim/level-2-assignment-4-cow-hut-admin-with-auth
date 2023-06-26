@@ -1,12 +1,11 @@
 import { User } from './user.model';
 import { IUser } from './user.interface';
-import config from '../../../config';
 import ApiError from '../../../erros/ApiError';
 
 const createUser = async (user: IUser): Promise<IUser | null> => {
   const createdUser = await User.create(user);
   if (!createdUser) {
-    throw new Error('Failed to create user!');
+    throw new ApiError(500, 'Failed to create user!');
   }
   return createdUser;
 };
@@ -25,19 +24,33 @@ const updateUserData = async (
   id: string,
   userData: IUser
 ): Promise<IUser | null> => {
-  if (userData?.budget && userData?.income) {
-    throw new ApiError(400, 'A user can have both budget and income');
-  }
+  // let updatedDataAndCondition = { $set: { ...userData }, $unset: {}};
+  // const previousUserData = await User.findById(id);
+  // if(previousUserData && userData.role != previousUserData.role) {
+  //   if(userData.role == 'buyer') {
+  //     const { income, ...userDataWithoutIncome } = userData;
+  //     updatedDataAndCondition = { $set: { ...userDataWithoutIncome }, $unset: {}}
+  //     updatedDataAndCondition.$unset = {income: 1};
+  //     console.log(updatedDataAndCondition)
+  //   } else {
+  //     const { budget, ...userDataWithoutBudget } = userData;
+  //     updatedDataAndCondition = { $set: { ...userDataWithoutBudget }, $unset: {}}
+  //     updatedDataAndCondition.$unset = {budget: 1};
+  //     console.log(updatedDataAndCondition)
+  //   }
+  // }
+  // const updatedUserData = await User.findOneAndUpdate({ _id: id }, updatedDataAndCondition, {
+  //   new: true,$unset: true
+  // });
+  // return updatedUserData;
   const updatedUserData = await User.findOneAndUpdate({ _id: id }, userData, {
     new: true,
   });
-  ////TODO: user now found
   return updatedUserData;
 };
 
 const deleteUser = async (id: string) => {
   const result = await User.findByIdAndDelete(id);
-  ////TODO: user now found
   return result;
 };
 

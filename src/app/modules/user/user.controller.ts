@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from 'express';
+import {Request, RequestHandler, Response} from 'express';
 
 import { UserService } from './user.service';
 import catchAsync from '../../../shared/catchAsync';
@@ -9,7 +9,7 @@ const createUser: RequestHandler = catchAsync(
     const { user } = req.body;
     const result = await UserService.createUser(user);
 
-    sendResponse(res, {
+    sendResponse(res,{
       statusCode: 200,
       success: true,
       message: 'User created successfully',
@@ -36,6 +36,15 @@ const getUser: RequestHandler = catchAsync(
     const userId: string = req.params.id;
     const user = await UserService.getUser(userId);
 
+    if(!user) {
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Can not find user with this id',
+        data: user,
+      });
+    }
+
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -54,6 +63,15 @@ const updateUser: RequestHandler = catchAsync(
       userId,
       updatedUserData
     );
+
+    if(!updatedUser) {
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Can not find user with this id',
+        data: updatedUser,
+      });
+    }
 
     sendResponse(res, {
       statusCode: 200,
